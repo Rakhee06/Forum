@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
-import { Button, Card, Grid, Form, TextArea, Message } from 'semantic-ui-react';
+import {Button, Card, Grid, Form, TextArea, Message, Loader } from 'semantic-ui-react';
 
 import Layout from '../../components/Layout';
 import Question from '../../ethereum/question';
 import web3 from '../../ethereum/web3';
 import {Link, Router} from '../../routes';
 
+
 export default class QuestionShow extends Component {
 
     state = {
         answer: '',
         successMessage: '',
-        loading: false
+        loader: false
     };
 
     static async getInitialProps(props) {
 
         const question = Question(props.query.address);
         const summary = await question.methods.getQuestionDetails().call();
+        const manager = await question.methods.manager().call();
 
         console.log(summary);
         return {
@@ -25,7 +27,7 @@ export default class QuestionShow extends Component {
             value: summary[0],
             title: summary[1],
             description: summary[2],
-            question
+            manager:manager
 
         };
 
@@ -72,10 +74,9 @@ export default class QuestionShow extends Component {
         const question = Question(this.props.address);
 
 
-        this.setState({loading: true, errorMessage: '' });
+        this.setState({loader: true, errorMessage: '' });
         try {
             const accounts = await web3.eth.getAccounts();
-            // console.log(accounts[0]);
             await question.methods
                 .postAnswer(this.state.answer)
                 .send({
@@ -83,12 +84,12 @@ export default class QuestionShow extends Component {
                 });
 
             this.setState({ successMessage: 'Successfully Posted!'});
-            // Router.pushRoute('/');
+            Router.pushRoute('/');
         }
         catch(error) {
             this.setState({ errorMessage: error.message });
         }
-        this.setState({loading: false });
+        this.setState({loader: false });
 
     };
 
@@ -101,6 +102,9 @@ export default class QuestionShow extends Component {
                     <a><strong>Back</strong></a>
                 </Link>
                 <h3>Question</h3>
+                <Loader active={this.state.loader} size='large'>
+                    Wait while we fetch that transaction.
+                </Loader>
                 <Grid>
                     <Grid.Column width={8}>
                         {this.renderCards()}
@@ -119,13 +123,14 @@ export default class QuestionShow extends Component {
                                     style={{ minHeight: 100 }}
                                 />
                             </Form.Field>
+
                             <Message
                                 error
                                 header='Oops!'
-                                content={this.state.errorMessage ? this.state.errorMessage : this.state.successMessage }
+                                content={this.state.successMessage ? this.state.errorMessage : this.state.successMessage }
                             />
-                            <Button style={{ marginBottom: '10px'}} loading={this.state.loading} primary>Post Your Answer</Button>
-                            <Button floated='right' primary>Vote</Button>
+                            <Button style={{ marginBottom: '10px'}} primary>Post Your Answer</Button>
+
                         </Form>
                     </Grid.Column>
                     <Grid.Column width={8}>

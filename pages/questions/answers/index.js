@@ -1,15 +1,18 @@
 import React , { Component, Fragment } from 'react';
-import { Accordion, Label, Button } from 'semantic-ui-react';
+import { Accordion, Loader, Button, Message } from 'semantic-ui-react';
 
 import Layout from '../../../components/Layout';
 import Question from '../../../ethereum/question';
-import { Link } from '../../../routes';
+import { Link, Router } from '../../../routes';
+import Content from '../../../components/AccordianContent';
+import LabelContent from '../../../components/Label';
 
 
 export default class ShowAnswers extends Component {
 
     state = {
-        activeIndex: [this.props.answerCount.length]
+        activeIndex: [this.props.answerCount.length],
+        loader: false
     };
 
     static async getInitialProps(props) {
@@ -19,8 +22,6 @@ export default class ShowAnswers extends Component {
         const question = Question(address);
         const answerCount = await question.methods.getAnswerCount().call();
 
-        console.log(answerCount);
-
         const answers = await Promise.all(
             Array(parseInt(answerCount))
                 .fill()
@@ -29,17 +30,12 @@ export default class ShowAnswers extends Component {
                 })
         );
 
-        console.log(answers);
-
-        return { answerCount, answers };
+        return { answerCount, answers, question };
     }
 
     closeAll = () => {
         this.setState({ activeIndex: [] });
     };
-
-    handleSliderChange = e =>
-        this.setState({ activeIndex: (e.target.value) });
 
     handleTitleClick = (e, itemProps) => {
         const { index } = itemProps;
@@ -57,24 +53,28 @@ export default class ShowAnswers extends Component {
 
     render() {
 
-        let panels = this.props.answers.map((item, index) => ({
-            title: {
-                content: <Label content={item[0]} />,
-                key: `title-${index[0]}`
-            },
-            content: {
-                content: <Fragment>{item[1]}</Fragment>,
-                className: "des-ml-1",
-                key: `content-${index[0]}`
-            }
-        }));
+        let panels = this.props.answers.map((item, index) => {
+            return({
+                title: {
+                    content: <LabelContent content={item[0]} item={item}/>,
+                    key: `title-${index[0]}`
+                },
+                content: {
+                    content: <Content in={index} item={item} questionInstance={this.props.question}/>,
+                    className: "des-ml-1",
+                    key: `content-${index[0]}`
+                }
+            })
+        });
 
         const { activeIndex } = this.state;
 
         return (
-
             <Layout>
                 <h3>Answers</h3>
+                <Loader active={this.state.loader} size='large'>
+                    Wait while we fetch that transaction.
+                </Loader>
                 <Button onClick={this.closeAll} floated='right' primary>Close all</Button>
                 <Accordion
                     activeIndex={activeIndex}

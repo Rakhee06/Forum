@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, Message, TextArea, Checkbox } from 'semantic-ui-react';
+import { Button, Form, Input, Message, TextArea, Loader } from 'semantic-ui-react';
 
 import Layout from '../../components/Layout';
 import factory from '../../ethereum/factory';
@@ -12,15 +12,16 @@ export default class QuestionNew extends Component {
         value: '',
         title: '',
         description: '',
-        complete: true,
+        complete: false,
         errorMessage: '',
-        loading: false
+        loader: false,
+
     };
 
     onSubmit = async (event) => {
         event.preventDefault();
 
-        this.setState({ loading: true, errorMessage: '' });
+        this.setState({ loader: true, errorMessage: '' });
         try {
             const accounts = await web3.eth.getAccounts();
             console.log(accounts[0]);
@@ -35,7 +36,7 @@ export default class QuestionNew extends Component {
         catch(error) {
             this.setState({ errorMessage: error.message });
         }
-        this.setState({ loading: false });
+        this.setState({ loader: false });
 
     };
 
@@ -74,13 +75,6 @@ export default class QuestionNew extends Component {
                             }
                             style={{ minHeight: 100 }}
                         />
-
-                        <Checkbox label="Found an Answer?"
-                                  onChange={ event =>
-                                  this.setState({complete: event.target.value })}
-                                  checked={!this.state.complete}
-                        />
-
                     </Form.Field>
 
                     <Message
@@ -88,7 +82,12 @@ export default class QuestionNew extends Component {
                         header='Oops!'
                         content={this.state.errorMessage}
                     />
-                    <Button loading={this.state.loading} primary>Ask!</Button>
+
+                    <Button primary>Ask!</Button>
+
+                    <Loader active={this.state.loader} size='large'>
+                        Wait while we fetch that transaction.
+                    </Loader>
                 </Form>
             </Layout>
         );
