@@ -22,15 +22,23 @@ export default class ShowAnswers extends Component {
         const question = Question(address);
         const answerCount = await question.methods.getAnswerCount().call();
 
-        const answers = await Promise.all(
-            Array(parseInt(answerCount))
-                .fill()
-                .map((element, index) => {
-                    return question.methods.answers(index).call()
-                })
-        );
+        try {
 
-        return { answerCount, answers, question };
+            const answers = await Promise.all(
+                Array(parseInt(answerCount))
+                    .fill()
+                    .map((element, index) => {
+                        return question.methods.answers(index).call()
+                    })
+            );
+
+            return { answerCount, answers, question };
+
+        }
+        catch (error) {
+            console.log(error);
+        }
+
     }
 
     closeAll = () => {
@@ -62,9 +70,9 @@ export default class ShowAnswers extends Component {
                 content: {
                     content: <Content in={index} item={item} questionInstance={this.props.question}/>,
                     className: "des-ml-1",
-                    key: `content-${index[0]}`
+                    key: `content-${index[0]}`,
                 }
-            })
+            });
         });
 
         const { activeIndex } = this.state;

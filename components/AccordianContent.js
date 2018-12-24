@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Button, Loader, Message} from 'semantic-ui-react';
+import {Button, Loader} from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
 import {Router} from "../routes";
 
@@ -7,16 +7,9 @@ export default class Content extends Component{
     constructor(props){
         super(props);
         this.addVote = this.addVote.bind(this);
-        // this.getQuestionDetails = this.getQuestionDetails.bind(this);
-        // this.getQuestionDetails().then((res, err) => {
-        //     if (err) {
-        //         console.log(err);
-        //     }
-        // });
         this.state={
             QuestionValue: 0,
-            loader: false,
-            successMessage:''
+            loader: false
         }
 
     }
@@ -30,11 +23,20 @@ export default class Content extends Component{
     }
 
     getQuestionDetails = async() =>{
-        const summary = await this.props.questionInstance.methods.getQuestionDetails().call();
-        const value = summary[0];
-        this.setState({
-            QuestionValue: value
-        })
+
+        try {
+
+            const summary = await this.props.questionInstance.methods.getQuestionDetails().call();
+            const value = summary[0];
+            this.setState({
+                QuestionValue: value
+            });
+
+        }
+        catch(error) {
+            console.log(error);
+        }
+
     };
 
     addVote = async () =>{
@@ -65,7 +67,7 @@ export default class Content extends Component{
         catch (error) {
             console.log(error);
         }
-        this.setState({loader: false , successMessage: 'Chosen Answer!'});
+        this.setState({loader: false });
     };
 
     render(){
@@ -75,11 +77,6 @@ export default class Content extends Component{
                 <Loader active={this.state.loader} size='large'>
                     Wait while we fetch that transaction.
                 </Loader>
-                <Message
-                    error
-                    header='Oops!'
-                    content={this.state.successMessage}
-                />
                 <Fragment>{this.props.item[1]}</Fragment>
                 <Button onClick={this.addVote} floated='right' color='green'>Vote</Button>
                 <Button onClick={this.finalizeAnswer} floated='right' color='orange'>Finalize</Button>
