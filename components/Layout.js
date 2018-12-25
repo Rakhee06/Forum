@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Container } from 'semantic-ui-react';
 
 import Header from './Header';
+import Footer from './Footer';
 
 export default (props) => {
 
@@ -16,6 +17,7 @@ export default (props) => {
             </Head>
             <Header/>
             {props.children}
+            <Footer/>
         </Container>
     );
 }
