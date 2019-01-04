@@ -11,20 +11,30 @@ To run this project locally before deployment, the user must have latest version
 
 ## Steps to Run the application
 #### Development mode
-* Create a new directory in your local file system. - `mkdir forum`
-* Copy the given project zip files in that directory and extract the zip file. 
-* Open the terminal or command prompt window in that directory and type - `npm install`. 
-* The installation of all the dependencies takes approximately 10 minutes. 
-* Once the dependencies are installed, type `npm run dev` to start the application. 
-* The application boots up on your `localhost:3000`. Therefore, if you have anything running on this port, please close it.
+* Clone the repository.
+```sh
+$ git@github.com:Rakhee06/Forum.git
+```
+* Follow the below steps.
+```sh
+$ cd Forum
+$ npm install
+$ npm run dev
+```
+* Above steps will start the server at `localhost:3000`
 
 #### Production mode
-* Create a new directory in your local file system. - `mkdir Forum`
-* Copy the given project zip files in that directory and extract the zip file. 
-* Open the terminal or command prompt window in that directory and type - `npm install`. 
-* The installation of all the dependencies takes approximately 10 minutes.
-* Once the dependencies are installed, type `npm start` to start the application.
-* The application will be hosted on any free port available. The output console will show the port number.
+* Clone the repository.
+```sh
+$ git@github.com:Rakhee06/Forum.git
+```
+* Follow the below steps.
+```sh
+$ cd Forum
+$ npm install
+$ npm start
+```
+* The application will be hosted on any free port available. The output console will show the port number
 
 
 ## Steps to use the application
