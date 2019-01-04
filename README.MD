@@ -4,7 +4,7 @@ This project is developed to facilitate students of UMass Boston to post the que
 
 
 ## Assumptions
-This project is a decentralized web application. It is assumed that the user of this application knows how to use a computer and access the web browser. Anyone who needs to use this application is required to have an Ethereum account and an injected Web3 provider. Future version of the application will provide a wallet to the users who sign up and hence the above requirement is no longer needed.
+This project is a decentralized web application. Anyone who needs to use this application is required to have an Ethereum account and an injected Web3 provider. Future version of the application will provide a wallet to the users who sign up and hence the above requirement is no longer needed.
 
 ## Prerequisites to run this project locally
 To run this project locally before deployment, the user must have latest version of Node.js and npm module installed in their systems
