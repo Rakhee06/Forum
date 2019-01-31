@@ -78,8 +78,11 @@ export default class Content extends Component{
                     Wait while we fetch that transaction.
                 </Loader>
                 <Fragment>{this.props.item[1]}</Fragment>
-                <Button onClick={this.addVote} floated='right' color='green'>Vote</Button>
-                <Button onClick={this.finalizeAnswer} floated='right' color='orange'>Finalize</Button>
+                <Button.Group floated='right'>
+                    <Button onClick={this.addVote} positive>Vote</Button>
+                    <Button.Or />
+                    <Button onClick={this.finalizeAnswer} color='orange'>Finalize</Button>
+                </Button.Group>
             </div>
         );
     }

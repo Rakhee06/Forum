@@ -8,7 +8,7 @@ import Footer from './Footer';
 export default (props) => {
 
     return (
-        <Container>
+        <Container fluid>
             <Head>
                 <link
                     rel="stylesheet"
