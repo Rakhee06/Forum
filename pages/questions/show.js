@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Button, Card, Grid, Form, TextArea, Message, Loader } from 'semantic-ui-react';
+import {Button, Card, Grid, Form, TextArea, Message, Loader, Feed} from 'semantic-ui-react';
 
 import Layout from '../../components/Layout';
 import Question from '../../ethereum/question';
 import web3 from '../../ethereum/web3';
+import factory from '../../ethereum/factory';
 import {Link, Router} from '../../routes';
 
 
@@ -20,6 +21,16 @@ export default class QuestionShow extends Component {
         const question = Question(props.query.address);
         const summary = await question.methods.getQuestionDetails().call();
         const manager = await question.methods.manager().call();
+        const questions = await factory.methods.getDeployedQuestions().call();
+        const questionCount = await factory.methods.getForumCount().call();
+
+        const forumDetails = await Promise.all(
+            Array(parseInt(questionCount))
+                .fill()
+                .map((element, index) => {
+                    return factory.methods.forum(index).call();
+                })
+        );
 
         console.log(summary);
         return {
@@ -27,11 +38,33 @@ export default class QuestionShow extends Component {
             value: summary[0],
             title: summary[1],
             description: summary[2],
-            manager:manager
+            manager:manager,
+            questions,
+            forumDetails
 
         };
 
     }
+
+    renderListOfQuestions() {
+        const items = this.props.forumDetails.map(item => {
+            return {
+                // header: item[1],
+                content: (
+                    <Link route={`/questions/${item[0]}`}>
+                        {item[1]}
+                    </Link>
+                ),
+                style: { overflowWrap: 'break-word' }
+            }
+        });
+
+        return (
+            <Feed events={items} />
+        );
+
+
+    };
 
     renderCards() {
 
@@ -98,15 +131,17 @@ export default class QuestionShow extends Component {
         return (
 
             <Layout>
-                <Link route={`/`}>
-                    <a><strong>Back</strong></a>
-                </Link>
-                <h3>Question</h3>
+                <h3>Question Detail</h3>
                 <Loader active={this.state.loader} size='large'>
                     Wait while we fetch that transaction.
                 </Loader>
                 <Grid>
-                    <Grid.Column width={8}>
+                    <Grid.Column width={9}>
+                        <Link route={`/questions/${this.props.address}/answers`}>
+                            <a>
+                                <Button primary style={{ marginBottom: 10 }}> View Answers </Button>
+                            </a>
+                        </Link>
                         {this.renderCards()}
                         <Form
                             onSubmit={this.onSubmit}
@@ -120,7 +155,7 @@ export default class QuestionShow extends Component {
                                     onChange={ event =>
                                         this.setState({ answer: event.target.value })
                                     }
-                                    style={{ minHeight: 100 }}
+                                    style={{ minHeight: 200 }}
                                 />
                             </Form.Field>
 
@@ -133,12 +168,9 @@ export default class QuestionShow extends Component {
 
                         </Form>
                     </Grid.Column>
-                    <Grid.Column width={8}>
-                        <Link route={`/questions/${this.props.address}/answers`}>
-                            <a>
-                                <Button floated='right' primary> View Answers </Button>
-                            </a>
-                        </Link>
+                    <Grid.Column width={2}></Grid.Column>
+                    <Grid.Column width={4} textAlign="justified" streched="true">
+                        {this.renderListOfQuestions()}
                     </Grid.Column>
                 </Grid>
             </Layout>

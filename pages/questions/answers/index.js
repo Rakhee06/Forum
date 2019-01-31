@@ -1,5 +1,5 @@
-import React , { Component, Fragment } from 'react';
-import { Accordion, Loader, Button, Message } from 'semantic-ui-react';
+import React , { Component } from 'react';
+import { Accordion, Loader, Button } from 'semantic-ui-react';
 
 import Layout from '../../../components/Layout';
 import Question from '../../../ethereum/question';
@@ -83,7 +83,6 @@ export default class ShowAnswers extends Component {
                 <Loader active={this.state.loader} size='large'>
                     Wait while we fetch that transaction.
                 </Loader>
-                <Button onClick={this.closeAll} floated='right' primary>Close all</Button>
                 <Accordion
                     activeIndex={activeIndex}
                     panels={panels}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid , Feed, Icon } from 'semantic-ui-react';
+import { Card, Button, Grid , Feed, Icon, Image } from 'semantic-ui-react';
 
 import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
@@ -25,7 +25,6 @@ export default class QuestionIndex extends Component {
 
     renderQuestions() {
 
-
         const items = this.props.forumDetails.map(item => {
             return {
                 header: item[1],
@@ -38,20 +37,9 @@ export default class QuestionIndex extends Component {
             }
         });
 
-
-        // const items = this.props.questions.map(address => {
-        //     return {
-        //         header: address,
-        //         description: (
-        //             <Link route={`/questions/${address}`}>
-        //                 <a>View Question</a>
-        //             </Link>
-        //         ),
-        //         style: { overflowWrap: 'break-word' }
-        //     }
-        // });
-
-        return <Card.Group items={items} />;
+        return (
+            <Card.Group items={items} />
+            );
 
 
     };
@@ -60,17 +48,17 @@ export default class QuestionIndex extends Component {
     render() {
         return(
             <Layout>
-                    <h3>Questions</h3>
                     <Grid>
                         <Grid.Row>
-                            <Grid.Column width={4}>
+                            <Grid.Column>
                                 <Link route='/questions/new'>
                                     <a>
-                                        <Button
-                                            content='Ask a Question'
-                                            icon='add circle'
-                                            primary
-                                        />
+                                        <Button animated primary floated="right">
+                                            <Button.Content visible>Have a Question?</Button.Content>
+                                            <Button.Content hidden>Ask
+                                                <Icon name='exclamation' />
+                                            </Button.Content>
+                                        </Button>
                                     </a>
                                 </Link>
                             </Grid.Column>
@@ -104,16 +92,6 @@ export default class QuestionIndex extends Component {
                                             </Feed.Summary>
                                         </Feed.Content>
                                     </Feed.Event>
-
-                                    {/*<Feed.Event>*/}
-                                        {/*<Feed.Label>*/}
-                                            {/*<img src='/images/iu.png' />*/}
-                                        {/*</Feed.Label>*/}
-                                        {/*<Feed.Content>*/}
-                                            {/*You added Elliot Fu to the group <a>Coworkers</a>*/}
-                                        {/*</Feed.Content>*/}
-                                    {/*</Feed.Event>*/}
-
                                 </Feed>
                             </Grid.Column>
                         </Grid.Row>
