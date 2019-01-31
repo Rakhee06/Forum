@@ -66,4 +66,7 @@ $ npm start
 * Click on `Finalize` button. It takes approximately 15 seconds to add the transaction to the blockchain. The value of the question is transferred from your account to the account of the person who posted the best answer.
 
 ### Link to the deployed Application
+Note : Need a web3 provider injected in the browser and a valid ethereum account to use the application.
+
 https://umass-forum.herokuapp.com
+
