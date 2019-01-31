@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prestart": "next build",
     "dev": "node server.js",
     "start": "NODE_ENV=production node server.js",
     "heroku-postbuild": "next build"
