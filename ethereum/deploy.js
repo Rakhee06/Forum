@@ -4,9 +4,9 @@ const compiledFactory = require('./build/ForumFactory');
 
 const provider = new HDWalletProvider(
     //give access to account mnemonic
-    'relax safe eager uphold toddler spare vote crucial mean science raccoon height',
+    // provide your metamask account mnemonic
     //link to RinkeBy network
-    'https://rinkeby.infura.io/v3/3df3446a077546a8aeba10bd83191704'
+    // provide link to your infura network
 );
 const web3 = new Web3(provider);
 
